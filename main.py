@@ -8,6 +8,7 @@ import json
 PORT=8001
 USERNAME=os.getenv('vesync_username')
 PASSWORD=os.getenv('vesync_password')
+DEBUG=os.getenv('debug')
 POLLRATE=120
 Handler = http.server.SimpleHTTPRequestHandler
 
@@ -40,11 +41,11 @@ def get_metrics():
                     value = 0
                 elif value == 'on':
                     value = 1
-            resp = resp + "<br>" + field + " " + str(value)
+            resp = resp + "\n" + field + " " + str(value)
     return resp
 
 with socketserver.TCPServer(("", PORT), ReqHandler) as httpd:
     print("Starting on port", PORT)
-    manager = VeSync(USERNAME, PASSWORD, None, False)
+    manager = VeSync(USERNAME, PASSWORD, None, DEBUG)
     manager.login()
     httpd.serve_forever()
