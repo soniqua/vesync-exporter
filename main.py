@@ -33,9 +33,9 @@ def get_metrics():
         for item in data:
             field = item.replace(' ','_').lower()+'{name="'+name+'", model="'+model+'"}'
             value = data[item]
-            if value in ['off', False]:
+            if value in ['off', 'offline', False]:
                 value = 0
-            elif value in ['on', True]:
+            elif value in ['on', 'online', True]:
                 value = 1
             if isinstance(value, str):
                 try:
