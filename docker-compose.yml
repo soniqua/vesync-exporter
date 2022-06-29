@@ -1,0 +1,19 @@
+version: "3.7"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  vesync-exporter:
+    build:
+      dockerfile: Dockerfile
+      context: './'
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: "vesync-prometheus.latitude.soniqua"
+      VIRTUAL_PORT: 8001
+      vesync_password: "${vesync_password}"
+      vesync_username: "${vesync_username}"
+    networks:
+      proxy: {}
