@@ -17,9 +17,9 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         if self.path == '/metrics':
             resp = get_metrics()
             self.send_response(200)
-            self.send_header('Content-type','text/html')
+            self.send_header('Content-type','text/plain')
             self.end_headers()
-            self.wfile.write(resp.encode('utf-8'))
+            self.wfile.write(resp[1:].encode('utf-8'))
 
 def get_metrics():
     resp = ""
@@ -31,7 +31,7 @@ def get_metrics():
         del data['Device Name']
         del data['Model']
         for item in data:
-            field = item.replace(' ','_').lower()+'{name='+name+', model='+model+'}'
+            field = item.replace(' ','_').lower()+'{name="'+name+'", model="'+model+'"}'
             if isinstance(data[item], str):
                 if ' ' in data[item]:
                     value = f"\"{data[item]}\""
