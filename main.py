@@ -32,16 +32,19 @@ def get_metrics():
         del data['Model']
         for item in data:
             field = item.replace(' ','_').lower()+'{name="'+name+'", model="'+model+'"}'
-            if isinstance(data[item], str):
-                if ' ' in data[item]:
-                    value = f"\"{data[item]}\""
-                else:
-                    value = data[item]
-                if value == 'off':
-                    value = 0
-                elif value == 'on':
-                    value = 1
-            resp = resp + "\n" + field + " " + str(value)
+            value = data[item]
+            if value in ['off', False]:
+                value = 0
+            elif value in ['on', True]:
+                value = 1
+            if isinstance(value, str):
+                try:
+                    resp = resp + "\n" + field + " " + str(int(value))
+                except:
+                    print(f'Could not cast {value}')
+            else:
+                resp = resp + "\n" + field + " " + str(value)
+
     return resp
 
 with socketserver.TCPServer(("", PORT), ReqHandler) as httpd:
